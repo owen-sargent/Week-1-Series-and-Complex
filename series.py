@@ -6,8 +6,17 @@
 # Harmonic Series
 def harmonic(n_terms):
     """Compute the sum of the first n terms of the harmonic series."""
-    raise NotImplementedError("Student assignment not yet implemented.")
+    total_sum = 0.0
 
+    if not isinstance(n_terms, int) or n_terms <= 0:
+        raise ValueError("n_terms must be a positive integer.")
+
+    n_terms = int(n_terms)
+
+    for i in range(1, n_terms + 1):
+        total_sum += 1 / i
+    
+    return total_sum
 
 # Boas, 3rd Edition, Equation 1.13.4
 def boas_1_13_4(
