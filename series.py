@@ -1,22 +1,31 @@
 """Student assignment implementation file for Infinite Series and Taylor Series expansions."""
-
+import numpy as np
+from math import log
 
 # --- Student Assignment --- #
 # --- Boas --- #
 # Harmonic Series
 def harmonic(n_terms):
     """Compute the sum of the first n terms of the harmonic series."""
-    total_sum = 0.0
-
-    if not isinstance(n_terms, int) or n_terms <= 0:
-        raise ValueError("n_terms must be a positive integer.")
-
+    total_sum = 0
     n_terms = int(n_terms)
 
-    for i in range(1, n_terms + 1):
-        total_sum += 1 / i
-    
-    return total_sum
+    if not isinstance(n_terms, (int, np.integer)) or n_terms <= 0:
+        raise ValueError("n_terms must be a positive integer.")
+
+    if n_terms < 100:
+        for i in range(1, n_terms + 1):
+            total_sum += 1 / i
+        return total_sum
+
+    n_terms = float(n_terms) #NEEDS TO BE FIXED
+    return (
+        log(n_terms)
+        + 0.5772156649015329
+        + inv_n / 2
+        - inv_n**2 / 12
+        + inv_n**4 / 120
+    )
 
 # Boas, 3rd Edition, Equation 1.13.4
 def boas_1_13_4(
