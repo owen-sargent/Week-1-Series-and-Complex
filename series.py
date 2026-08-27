@@ -126,24 +126,26 @@ def boas_1_13_22_plot(n_terms, filename=None):
     x = np.linspace(-2, 2, 100)
     y = np.exp(x) / (1 - x)
 
-    plt.plot(x, y, label="exp(x)/(1 - x)", color="blue")
+    fig, ax = plt.subplots()
+
+    ax.plot(x, y, label="exp(x)/(1 - x)", color="blue")
 
     for n in range(1, n_terms + 1):
         term = (x**n) / factorial(n)
-        plt.plot(x, term, label=f"Term {n}", linestyle="--")
+        ax.plot(x, term, label=f"Term {n}", linestyle="--")
 
-    plt.title(f"First {n_terms} Terms of the Series Expansion of exp(x)/(1 - x)")
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.legend()
-    plt.grid()
+    ax.set_title(f"First {n_terms} Terms of the Series Expansion of exp(x)/(1 - x)")
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.legend()
+    ax.grid()
 
     if filename:
-        plt.savefig(filename)
+        fig.savefig(filename)
     else:
-        plt.show()
+        fig.show()
 
-    return (x, y)
+    return fig, ax
 
 # Boas, Problem 1.16.1c
 def boas_1_16_1c(n_books_overhang):
