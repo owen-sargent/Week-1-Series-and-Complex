@@ -124,7 +124,7 @@ def plot_rlc(resistance, inductance, capacitance, omega, time, max_current, file
 
     phase_angle = np.angle(impedance)
 
-    angle = omega * time
+    angle = omega*time
 
     max_voltage = max_current * abs(impedance)
     voltage = max_voltage * np.sin(angle + phase_angle)

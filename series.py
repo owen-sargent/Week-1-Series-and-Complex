@@ -9,14 +9,16 @@ from numba import njit
 # Harmonic Series
 def harmonic(n_terms):
     """Computes the sum of the first n terms of the harmonic series.
-        Parameters
-        ----------
-        n_terms : int
-            The number of terms to sum in the harmonic series.
-        Returns
-        -------
-        float
-            The sum of the first n terms of the harmonic series.
+
+    Parameters
+    ----------
+    n_terms : int
+        The number of terms to sum in the harmonic series.
+
+    Returns
+    -------
+    float
+        The sum of the first n terms of the harmonic series.
     """
     total_sum = 0
     n_terms = int(n_terms)
@@ -44,18 +46,20 @@ def boas_1_13_4(
     x: float, rel_tol: float = 1e-8, max_iter: int = 100
 ) -> tuple[float, int]:
     """Computes the series of ln(1 + x).
-        Parameters
-        ----------
-        x : float
-            The value to compute the series for.
-        rel_tol : float, optional
-            The relative tolerance for convergence. Default is 1e-8.
-        max_iter : int, optional
-            The maximum number of iterations to perform. Default is 100.
-        Returns
-        -------
-        tuple[float, int]
-            A tuple containing the sum of the series and the number of iterations used.
+
+    Parameters
+    ----------
+    x : float
+        The value to compute the series for.
+    rel_tol : float, optional
+        The relative tolerance for convergence. Default is 1e-8.
+    max_iter : int, optional
+        The maximum number of iterations to perform. Default is 100.
+
+    Returns
+    -------
+    tuple[float, int]
+        A tuple containing the sum of the series and the number of iterations used.
     """
     total_sum = 0
     term = x
@@ -72,18 +76,20 @@ def boas_1_13_4(
 # Boas, Problem 1.13.22
 def boas_1_13_22(x, rel_tol = 1e-8, max_iter = 100):
     """Computes the sum of the Maclaurin series for exp(x)/(1 - x).
-        Parameters
-        ----------
-        x : float
-            The value to compute the series for.
-        rel_tol : float, optional
-            The relative tolerance for convergence. Default is 1e-8.
-        max_iter : int, optional
-            The maximum number of iterations to perform. Default is 100.
-        Returns
-        -------
-        tuple[float, int]
-            A tuple containing the sum of the series and the number of iterations used.
+
+    Parameters
+    ----------
+    x : float
+        The value to compute the series for.
+    rel_tol : float, optional
+        The relative tolerance for convergence. Default is 1e-8.
+    max_iter : int, optional
+        The maximum number of iterations to perform. Default is 100.
+
+    Returns
+    -------
+    tuple[float, int]
+        A tuple containing the sum of the series and the number of iterations used.
     """
     total_sum = 1
     term = 1
@@ -105,16 +111,18 @@ def boas_1_13_22(x, rel_tol = 1e-8, max_iter = 100):
 # Plots the first N terms of the series expansion of exp(x)/(1 - x)
 def boas_1_13_22_plot(n_terms, filename=None):
     """Plots the first N terms of the series expansion of exp(x)/(1 - x)
-        Parameters
-        ----------
-        n_terms : int
-            The number of terms to plot in the series expansion.
-        filename : str, optional
-            The filename to save the plot. If None, the plot will be displayed.
-        Returns
-        -------
-        Tuple[x, y]
-            A tuple containing the x and y values of the plot.
+
+    Parameters
+    ----------
+    n_terms : int
+        The number of terms to plot in the series expansion.
+    filename : str, optional
+        The filename to save the plot. If None, the plot will be displayed.
+
+    Returns
+    -------
+        tuple[matplotlib.figure.Figure, matplotlib.axes.Axes]
+            A tuple containing the figure and axes objects for the plot.
     """
     @njit
     def factorial(n):
@@ -148,23 +156,78 @@ def boas_1_13_22_plot(n_terms, filename=None):
     return fig, ax
 
 # Boas, Problem 1.16.1c
-def boas_1_16_1c(n_books_overhang):
-    """Compute how many books can be stacked on a table with a given overhang."""
-    raise NotImplementedError("Student assignment not yet implemented.")
+def boas_1_16_1c(overhang_d):
+    """Computes how many books can be stacked on a table with a given overhang.
 
+    Parameters
+    ----------
+    overhang_d : float
+        The desired overhang distance.
+
+    Returns
+    -------
+    int
+        Minimum number of books that can be stacked on a table with the given overhang.
+    """
+    if overhang_d <= 0:
+        raise ValueError("overhang_d must be a positive real number.")
+
+    n_books = 0
+    total_overhang = 0.0
+
+
+    if overhang_d < 5:
+        n_books = 0
+        total_overhang = 0.0
+
+        while total_overhang < overhang_d:
+            n_books += 1
+            total_overhang += 1 / (2 * n_books)
+        return n_books + 1
+
+    gamma = 0.5772156649015329
+    n_books = np.exp(2 * overhang_d - gamma) # not - 0.5 + (1 / (12 * overhang_d)) - (1 / (288 * overhang_d**3)) due to those terms actually being the correction for n_books
+
+    return int(np.ceil(n_books))
 
 
 # --- Landau --- #
 # The following questions are from Landau 3.3.1
 # HOWEVER, these should be completed with cos instead of sin
 def cos_apprx(x, rel_tol = 1e-8, max_iter = 100):
-    """Compute the approximation of cos(x) using the Taylor series expansion.
+    """Computes the Taylor series expansion of cos(x) until convergence or maximum iterations reached.
 
-    This function computes the Taylor series of cos(x) until the series converges
-    or maximum number of iterations is reached. The function returns the approximation
-    of cos(x) and the number of iterations used to compute the approximation and makes
-    use of the identity cos(x) = cos(x + 2*pi*n) for any integer n to reduce the input
-    x to the range [0, 2*pi].
+    Parameters
+    ----------
+    x : float
+        The value to compute the series for.
+    rel_tol : float, optional
+        The relative tolerance for convergence. Default is 1e-8.
+    max_iter : int, optional
+        The maximum number of iterations to perform. Default is 100.
 
+    Returns
+    -------
+    float
+            The approximation of cos(x).
+    int
+        The number of iterations used to compute the approximation.
     """
-    raise NotImplementedError("Student assignment not yet implemented.")
+
+    x = x % (2 * np.pi)  # Reduces x to the range [0, 2π] from the periodicity of the cosine function
+
+    if x > np.pi:
+        x -= 2 * np.pi  # Reduces x to the range [-π, π] for better convergence of the Taylor series
+
+    term = 1
+    total_sum = 1
+    n = 1
+    iter_count = 1
+
+    while abs(term / total_sum) > rel_tol and iter_count <= max_iter:
+        term *= -x*x / (2 * n * (2 * n - 1))
+        total_sum += term
+        n += 1
+        iter_count += 1
+   
+    return total_sum, iter_count
