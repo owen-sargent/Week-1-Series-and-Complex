@@ -96,7 +96,7 @@ def boas_1_13_22(x: float, rel_tol: float = 1e-8, max_iter: int = 100) -> tuple[
     """
     total_sum: float = 1.0
     term: float = 1.0
-    n: int = 1.0
+    n: int = 1
     p_n: float = 1.0
     f_n: float = 1.0
     s_n: float = 1.0
@@ -128,24 +128,39 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
             A tuple containing the figure and axes objects for the plot.
     """
     @njit
-    def factorial(n):
+    def factorial(n: int) -> int:
         if n == 0 or n == 1:
             return 1
         else:
             return n * factorial(n - 1)
 
-    x = np.linspace(-2, 2, 100)
-    y = np.exp(x) / (1 - x)
+    x = np.linspace(-5, 5, 100)
 
     fig, ax = plt.subplots()
 
-    ax.plot(x, y, label="exp(x)/(1 - x)", color="blue")
+    exact = np.exp(x) / (1 - x)
+    ax.plot(
+        x,
+        exact,
+        color="black",
+        label=r"$\frac{e^x}{1 - x}$",
+    )
 
-    for n in range(1, n_terms + 1):
-        term = (x**n) / factorial(n)
-        ax.plot(x, term, label=f"Term {n}", linestyle="--")
+    exp_approx = np.zeros_like(x)
 
-    ax.set_title(f"First {n_terms} Terms of the Series Expansion of exp(x)/(1 - x)")
+    for n in range(n_terms):
+        exp_approx += (x**n) / factorial(n)
+        approximation = exp_approx / (1.0 - x)
+
+        ax.plot(
+            x,
+            approximation,
+            color=f"C{n}"
+            label=f"n = {n + 1}",
+        )
+
+    ax.set_xlim(-5.0, 5.0)
+    ax.set_title(f"First {n_terms} Terms of the Series Expansion of $e^x/(1 - x)$")
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.legend()
@@ -173,8 +188,10 @@ def boas_1_16_1c(overhang_d: float) -> int:
     int
         Minimum number of books that can be stacked on a table with the given overhang.
     """
-    if overhang_d <= 0:
-        raise ValueError("overhang_d must be a positive real number.")
+    if overhang_d < 0:
+        raise ValueError("overhang_d must be a positive real number or zero.")
+    elif overhang_d == 0:
+        return 0
 
     n_books = 0
     total_overhang = 0.0
@@ -224,8 +241,8 @@ def cos_apprx(x: float, rel_tol: float = 1e-8, max_iter: int = 100) -> tuple[flo
     if x > np.pi:
         x -= 2 * np.pi  # Reduces x to the range [-π, π] for better convergence of the Taylor series
 
-    term: float = 1
-    total_sum: float = 1
+    term: float = 1.0
+    total_sum: float = 1.0
     n: int = 1
     iter_count: int = 1
 
