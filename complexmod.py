@@ -53,7 +53,6 @@ def nth_root(z, n):
 
     roots = root * (np.cos(root_theta) + 1j * np.sin(root_theta))
 
-
     if not isinstance(n, int) or n <= 0:
         raise ValueError("n must be a positive integer.")
 
