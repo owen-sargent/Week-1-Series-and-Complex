@@ -4,6 +4,7 @@ from math import log
 import matplotlib.pyplot as plt
 from numba import njit
 
+
 # --- Student Assignment --- #
 # --- Boas --- #
 # Harmonic Series
@@ -40,6 +41,7 @@ def harmonic(n_terms):
         + recipical**4 / 120
     )
 
+
 # Boas, 3rd Edition, Equation 1.13.4
 def boas_1_13_4(
     x: float, rel_tol: float = 1e-8, max_iter: int = 100
@@ -73,7 +75,7 @@ def boas_1_13_4(
 
 
 # Boas, Problem 1.13.22
-def boas_1_13_22(x, rel_tol = 1e-8, max_iter = 100):
+def boas_1_13_22(x, rel_tol=1e-8, max_iter=100):
     """Computes the sum of the Maclaurin series for exp(x)/(1 - x).
 
     Parameters
@@ -154,6 +156,7 @@ def boas_1_13_22_plot(n_terms, filename=None):
 
     return fig, ax
 
+
 # Boas, Problem 1.16.1c
 def boas_1_16_1c(overhang_d):
     """Computes how many books can be stacked on a table with a given overhang.
@@ -174,7 +177,6 @@ def boas_1_16_1c(overhang_d):
     n_books = 0
     total_overhang = 0.0
 
-
     if overhang_d < 5:
         n_books = 0
         total_overhang = 0.0
@@ -185,7 +187,9 @@ def boas_1_16_1c(overhang_d):
         return n_books + 1
 
     gamma = 0.5772156649015329
-    n_books = np.exp(2 * overhang_d - gamma) # not - 0.5 + (1 / (12 * overhang_d)) - (1 / (288 * overhang_d**3)) due to those terms actually being the correction for n_books
+    n_books = np.exp(2 * overhang_d - gamma) 
+    # not - 0.5 + (1 / (12 * overhang_d)) - (1 / (288 * overhang_d**3)) 
+    #due to those terms actually being the correction for n_books
 
     return int(np.ceil(n_books))
 
@@ -228,5 +232,5 @@ def cos_apprx(x, rel_tol = 1e-8, max_iter = 100):
         total_sum += term
         n += 1
         iter_count += 1
-   
+
     return total_sum, iter_count
