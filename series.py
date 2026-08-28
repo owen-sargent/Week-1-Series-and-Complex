@@ -140,12 +140,16 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
     )
 
     exp_approx = np.zeros_like(x)
+    term = np.ones_like(x)
 
     for n in range(n_terms):
-        exp_approx += (x**n) / np.factorial(n)
-        approximation = exp_approx / (1.0 - x)
+        if n > 0:
+            term *= x / n
 
-        ax.plot(
+    exp_approx += term
+    approximation = exp_approx / (1.0 - x)
+
+    ax.plot(
             x,
             approximation,
             color=f"C{n}",
