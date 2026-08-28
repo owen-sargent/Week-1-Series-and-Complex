@@ -187,9 +187,9 @@ def boas_1_16_1c(overhang_d):
         return n_books + 1
 
     gamma = 0.5772156649015329
-    n_books = np.exp(2 * overhang_d - gamma) 
-    # not - 0.5 + (1 / (12 * overhang_d)) - (1 / (288 * overhang_d**3)) 
-    #due to those terms actually being the correction for n_books
+    n_books = np.exp(2 * overhang_d - gamma)
+    # not - 0.5 + (1 / (12 * overhang_d)) - (1 / (288 * overhang_d**3))
+    # due to those terms actually being the correction for n_books
 
     return int(np.ceil(n_books))
 
@@ -197,7 +197,7 @@ def boas_1_16_1c(overhang_d):
 # --- Landau --- #
 # The following questions are from Landau 3.3.1
 # HOWEVER, these should be completed with cos instead of sin
-def cos_apprx(x, rel_tol = 1e-8, max_iter = 100):
+def cos_apprx(x, rel_tol=1e-8, max_iter=100):
     """Computes the Taylor series expansion of cos(x) until convergence or maximum iterations reached.
 
     Parameters
