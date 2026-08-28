@@ -4,7 +4,6 @@ from math import log
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
-from numba import njit
 
 
 # --- Student Assignment --- #
@@ -127,14 +126,8 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
         tuple[matplotlib.figure.Figure, matplotlib.axes.Axes]
             A tuple containing the figure and axes objects for the plot.
     """
-    @njit
-    def factorial(n: int) -> int:
-        if n == 0 or n == 1:
-            return 1
-        else:
-            return n * factorial(n - 1)
 
-    x = np.linspace(-5, 5, 100)
+    x = np.linspace(-5, 5, 1000)
 
     fig, ax = plt.subplots()
 
@@ -149,7 +142,7 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
     exp_approx = np.zeros_like(x)
 
     for n in range(n_terms):
-        exp_approx += (x**n) / factorial(n)
+        exp_approx += (x**n) / np.factorial(n)
         approximation = exp_approx / (1.0 - x)
 
         ax.plot(
