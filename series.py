@@ -2,6 +2,8 @@
 import numpy as np
 from math import log
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 from numba import njit
 
 
@@ -21,7 +23,7 @@ def harmonic(n_terms: int) -> float:
     float
         The sum of the first n terms of the harmonic series.
     """
-    total_sum = 0
+    total_sum = 0.0
     n_terms = int(n_terms)
 
     if not isinstance(n_terms, (int, np.integer)) or n_terms <= 0:
@@ -62,9 +64,9 @@ def boas_1_13_4(
     tuple[float, int]
         A tuple containing the sum of the series and the number of iterations used.
     """
-    total_sum = 0
-    term = x
-    n = 1
+    total_sum: float = 0.0
+    term: float = x
+    n: int = 1
 
     while abs(term) > rel_tol and n <= max_iter:
         total_sum += term
@@ -92,12 +94,12 @@ def boas_1_13_22(x: float, rel_tol: float = 1e-8, max_iter: int = 100) -> tuple[
     tuple[float, int]
         A tuple containing the sum of the series and the number of iterations used.
     """
-    total_sum = 1
-    term = 1
-    n = 1
-    p_n = 1
-    f_n = 1
-    s_n = 1
+    total_sum: float = 1.0
+    term: float = 1.0
+    n: int = 1.0
+    p_n: float = 1.0
+    f_n: float = 1.0
+    s_n: float = 1.0
 
     while abs(term) > rel_tol and n <= max_iter:
         p_n *= x
@@ -110,7 +112,7 @@ def boas_1_13_22(x: float, rel_tol: float = 1e-8, max_iter: int = 100) -> tuple[
 
 
 # Plots the first N terms of the series expansion of exp(x)/(1 - x)
-def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[plt.Figure, plt.Axes]:
+def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure, Axes]:
     """Plots the first N terms of the series expansion of exp(x)/(1 - x)
 
     Parameters
@@ -222,10 +224,10 @@ def cos_apprx(x: float, rel_tol: float = 1e-8, max_iter: int = 100) -> tuple[flo
     if x > np.pi:
         x -= 2 * np.pi  # Reduces x to the range [-π, π] for better convergence of the Taylor series
 
-    term = 1
-    total_sum = 1
-    n = 1
-    iter_count = 1
+    term: float = 1
+    total_sum: float = 1
+    n: int = 1
+    iter_count: int = 1
 
     while abs(term / total_sum) > rel_tol and iter_count <= max_iter:
         term *= -x*x / (2 * n * (2 * n - 1))
