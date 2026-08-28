@@ -31,7 +31,6 @@ def harmonic(n_terms):
             total_sum += 1 / i
         return total_sum
 
-    n_terms = float(n_terms)
     recipical = 1 / n_terms
     return (
         log(n_terms)
