@@ -96,7 +96,7 @@ def plot_rlc(
         time: NDArray[np.float64],
         max_current: float,
         filename: str | None = None
-        ) -> tuple[Any, Any]:
+        ) -> tuple[Any,Any]:
     """Plot the current and voltage in a series RLC circuit over time.
 
     Parameters
@@ -171,7 +171,7 @@ def plot_rlc(
         lines = current_line + voltage_line
         current_ax.legend(
             lines,
-            [line.get_label() for line in lines],
+            [str(line.get_label()) for line in lines],
         )
 
         if filename is not None:
