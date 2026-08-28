@@ -155,7 +155,7 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
         ax.plot(
             x,
             approximation,
-            color=f"C{n}"
+            color=f"C{n}",
             label=f"n = {n + 1}",
         )
 
