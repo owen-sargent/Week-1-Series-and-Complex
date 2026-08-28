@@ -5,11 +5,13 @@ from astropy import units as u
 from astropy.units import Quantity as Q
 from astropy.visualization import quantity_support
 import matplotlib.pyplot as plt
+from typing import Any
+from numpy.typing import NDArray
 
 
 # --- Student Assignment --- #
 # --- General --- #
-def complex_polar(z):
+def complex_polar(z: complex) -> tuple[float, float]:
     """Convert a complex number to polar form.
 
     Parameters
@@ -19,7 +21,7 @@ def complex_polar(z):
 
     Returns
     -------
-    tuple
+    tuple[float, float]
         A tuple containing the magnitude (r) and phase (theta) in radians.
     """
     r = abs(z)
@@ -27,7 +29,7 @@ def complex_polar(z):
     return (r, theta)
 
 
-def nth_root(z, n):
+def nth_root(z: complex, n: int) -> NDArray[np.complex128]:
     """Find all n-th roots of a complex number.
 
     Parameters
@@ -61,7 +63,7 @@ def nth_root(z, n):
 
 # --- Boas --- #
 @u.quantity_input
-def complex_impedance(R, L, C, W):
+def complex_impedance(R: float, L: float, C: float, W: float) -> complex:
     """Calculate the complex impedance of a series RLC circuit.
 
     Parameters
@@ -86,7 +88,15 @@ def complex_impedance(R, L, C, W):
 
 
 # See Boas Example 2.16 - Electricity
-def plot_rlc(resistance, inductance, capacitance, omega, time, max_current, filename=None):
+def plot_rlc(
+        resistance: float,
+        inductance: float,
+        capacitance: float,
+        omega: float,
+        time: NDArray[np.float64],
+        max_current: float,
+        filename: str | None = None
+        ) -> tuple[Any, Any]:
     """Plot the current and voltage in a series RLC circuit over time.
 
     Parameters
