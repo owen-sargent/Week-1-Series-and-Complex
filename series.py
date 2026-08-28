@@ -8,7 +8,7 @@ from numba import njit
 # --- Student Assignment --- #
 # --- Boas --- #
 # Harmonic Series
-def harmonic(n_terms):
+def harmonic(n_terms: int) -> float:
     """Computes the sum of the first n terms of the harmonic series.
 
     Parameters
@@ -75,7 +75,7 @@ def boas_1_13_4(
 
 
 # Boas, Problem 1.13.22
-def boas_1_13_22(x, rel_tol=1e-8, max_iter=100):
+def boas_1_13_22(x: float, rel_tol: float = 1e-8, max_iter: int = 100) -> tuple[float, int]:
     """Computes the sum of the Maclaurin series for exp(x)/(1 - x).
 
     Parameters
@@ -110,7 +110,7 @@ def boas_1_13_22(x, rel_tol=1e-8, max_iter=100):
 
 
 # Plots the first N terms of the series expansion of exp(x)/(1 - x)
-def boas_1_13_22_plot(n_terms, filename=None):
+def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[plt.Figure, plt.Axes]:
     """Plots the first N terms of the series expansion of exp(x)/(1 - x)
 
     Parameters
@@ -158,7 +158,7 @@ def boas_1_13_22_plot(n_terms, filename=None):
 
 
 # Boas, Problem 1.16.1c
-def boas_1_16_1c(overhang_d):
+def boas_1_16_1c(overhang_d: float) -> int:
     """Computes how many books can be stacked on a table with a given overhang.
 
     Parameters
@@ -197,7 +197,7 @@ def boas_1_16_1c(overhang_d):
 # --- Landau --- #
 # The following questions are from Landau 3.3.1
 # HOWEVER, these should be completed with cos instead of sin
-def cos_apprx(x, rel_tol=1e-8, max_iter=100):
+def cos_apprx(x: float, rel_tol: float = 1e-8, max_iter: int = 100) -> tuple[float, int]:
     """Computes the Taylor series expansion of cos(x) until convergence or maximum iterations reached.
 
     Parameters

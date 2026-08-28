@@ -96,7 +96,7 @@ def plot_rlc(
         time: NDArray[np.float64],
         max_current: float,
         filename: str | None = None
-        ) -> tuple[Any,Any]:
+        ) -> tuple[Any, Any]:
     """Plot the current and voltage in a series RLC circuit over time.
 
     Parameters
