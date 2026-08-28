@@ -6,6 +6,7 @@ from astropy.units import Quantity as Q
 from astropy.visualization import quantity_support
 import matplotlib.pyplot as plt
 
+
 # --- Student Assignment --- #
 # --- General --- #
 def complex_polar(z):
@@ -24,7 +25,6 @@ def complex_polar(z):
     r = abs(z)
     theta = cm.phase(z)
     return (r, theta)
-    
 
 
 def nth_root(z, n):
@@ -58,6 +58,7 @@ def nth_root(z, n):
         raise ValueError("n must be a positive integer.")
 
     return np.array(roots)
+
 
 # --- Boas --- #
 @u.quantity_input
