@@ -3,6 +3,7 @@ import cmath as cm
 import numpy as np
 from astropy import units as u
 from astropy.units import Quantity as Q
+from astropy.visualization import quantity_support
 import matplotlib.pyplot as plt
 
 # --- Student Assignment --- #
@@ -111,31 +112,58 @@ def plot_rlc(resistance, inductance, capacitance, omega, time, max_current, file
         A tuple containing the current and voltage arrays.
     """
 
-    resistance = getattr(resistance, 'value', resistance)
-    inductance = getattr(inductance, 'value', inductance)
-    capacitance = getattr(capacitance, 'value', capacitance)
-    omega = getattr(omega, 'value', omega)
-    time = getattr(time, 'value', time)
-    max_current = getattr(max_current, 'value', max_current)
-
     impedance = complex_impedance(resistance, inductance, capacitance, omega)
 
-    current = max_current * np.sin(omega * time)
-
-    phase_angle = np.angle(impedance)
-
     angle = omega * time
+
+    if isinstance(angle, Q):
+        angle = angle.to(
+            u.rad,
+            equivalencies=u.dimensionless_angles(),
+            )
+
+    current = max_current * np.sin(angle)
+
+    phase_angle = np.arctan2(impedance.imag, impedance.real)
 
     max_voltage = max_current * abs(impedance)
     voltage = max_voltage * np.sin(angle + phase_angle)
 
-    plt.figure(figsize=(10, 6))
-    plt.plot(time, current, label='Current (A)', color='blue')
-    plt.plot(time, voltage, label='Voltage (V)', color='orange')
-    plt.title('Current and Voltage in a Series RLC Circuit')
-    plt.xlabel('Time (s)')
-    plt.ylabel('Amplitude')
-    plt.legend()
-    plt.grid()
+    with quantity_support():
+        fig, current_ax = plt.subplots(figsize=(10, 6))
+        voltage_ax = current_ax.twinx()
 
+        current_line = current_ax.plot(
+            time,
+            current,
+            color="C0",
+            label="Current",
+        )
+
+        voltage_line = voltage_ax.plot(
+            time,
+            voltage,
+            color="C1",
+            label="Voltage",
+        )
+
+        current_ax.set_title(
+            "Current and Voltage in a Series RLC Circuit"
+        )
+        current_ax.set_xlabel("Time")
+        current_ax.set_ylabel("Current", color="C0")
+        voltage_ax.set_ylabel("Voltage", color="C1")
+
+        current_ax.tick_params(axis="y", colors="C0")
+        voltage_ax.tick_params(axis="y", colors="C1")
+        current_ax.grid()
+
+        lines = current_line + voltage_line
+        current_ax.legend(
+            lines,
+            [line.get_label() for line in lines],
+        )
+
+        if filename is not None:
+            fig.savefig(filename)
     return current, voltage
