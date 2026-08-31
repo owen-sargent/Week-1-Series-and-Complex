@@ -127,7 +127,7 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
             A tuple containing the figure and axes objects for the plot.
     """
 
-    x = np.linspace(-5, 5, 1000)
+    x = np.linspace(-2, 2, 1000)
 
     fig, ax = plt.subplots()
 
@@ -153,10 +153,11 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
         ax.plot(
             x,
             approximation,
+            color=f"C{n}",
             label=f"n = {n + 1}",
-    )
+        )
 
-    ax.set_xlim(-5.0, 5.0)
+    ax.set_xlim(-2.0, 2.0)
     ax.set_title(f"First {n_terms} Terms of the Series Expansion of $e^x/(1 - x)$")
     ax.set_xlabel("x")
     ax.set_ylabel("y")
