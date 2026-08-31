@@ -242,9 +242,9 @@ def cos_apprx(x: float, rel_tol: float = 1e-8, max_iter: int = 100) -> tuple[flo
     term: float = 1.0
     total_sum: float = 1.0
     n: int = 1
-    iter_count: int = 1
+    iter_count: int = 0
 
-    while abs(term / total_sum) > rel_tol and iter_count <= max_iter:
+    while abs(term / total_sum) > rel_tol and iter_count < max_iter:
         term *= -x*x / (2 * n * (2 * n - 1))
         total_sum += term
         n += 1
