@@ -137,7 +137,7 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
         x,
         exact,
         color="black",
-        label=r"$\frac{e^x}{1 - x}$",
+        label="True Function",
     )
 
     exp_approx = np.zeros_like(x)
@@ -154,15 +154,15 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
             x,
             approximation,
             color=f"C{n}",
-            label=f"n = {n + 1}",
+            linestyle=":",
+            label=f"Approximation (n={n + 1})",
         )
 
-    ax.set_xlim(-2.0, 2.0)
-    ax.set_title(f"First {n_terms} Terms of the Series Expansion of $e^x/(1 - x)$")
-    ax.set_xlabel("x")
-    ax.set_ylabel("y")
-    ax.legend()
-    ax.grid()
+    ax.set_ylim(-10.0, 10.0)
+    ax.set_title(r"Series Expansion of $\frac{e^x}{1 - x}$")
+    ax.set_xlabel(r"$x$")
+    ax.set_ylabel(r"$y$")
+    ax.legend(loc="upper left")
 
     if filename:
         fig.savefig(filename)
