@@ -208,7 +208,7 @@ def boas_1_16_1c(overhang_d: float) -> int:
     # not - 0.5 + (1 / (12 * overhang_d)) - (1 / (288 * overhang_d**3))
     # due to those terms actually being the correction for n_books
 
-    return int(np.ceil(n_books))
+    return int(np.ceil(n_books)) + 1
 
 
 # --- Landau --- #
