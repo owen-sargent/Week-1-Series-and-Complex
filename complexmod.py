@@ -140,39 +140,25 @@ def plot_rlc(
     voltage = max_voltage * np.sin(angle + phase_angle)
 
     with quantity_support():
-        fig, current_ax = plt.subplots(figsize=(10, 6))
-        voltage_ax = current_ax.twinx()
+        fig, axes = plt.subplots(2, 1, sharex=True)
 
-        current_line = current_ax.plot(
+        axes[0].plot(
             time,
             current,
-            color="C0",
-            label="Current",
         )
 
-        voltage_line = voltage_ax.plot(
+        axes[1].plot(
             time,
             voltage,
-            color="C1",
-            label="Voltage",
         )
 
-        current_ax.set_title(
-            "Current and Voltage in a Series RLC Circuit"
+        axes[0].set_title(
+            "Current and Voltage in Series RLC Circuit"
         )
-        current_ax.set_xlabel("Time")
-        current_ax.set_ylabel("Current", color="C0")
-        voltage_ax.set_ylabel("Voltage", color="C1")
 
-        current_ax.tick_params(axis="y", colors="C0")
-        voltage_ax.tick_params(axis="y", colors="C1")
-        current_ax.grid()
-
-        lines = current_line + voltage_line
-        current_ax.legend(
-            lines,
-            [str(line.get_label()) for line in lines],
-        )
+        axes[0].set_ylabel("Current (A)")
+        axes[1].set_ylabel("Voltage (V)")
+        axes[1].set_xlabel("Time (s)")
 
         if filename is not None:
             fig.savefig(filename)
