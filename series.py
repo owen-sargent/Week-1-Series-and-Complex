@@ -112,7 +112,7 @@ def boas_1_13_22(x: float, rel_tol: float = 1e-8, max_iter: int = 100) -> tuple[
 
 # Plots the first N terms of the series expansion of exp(x)/(1 - x)
 def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure, Axes]:
-    """Plots the first N terms of the series expansion of exp(x)
+    """Plots the first N terms of the series expansion of exp(x)/(1 - x)
 
     Parameters
     ----------
@@ -131,12 +131,13 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
 
     fig, ax = plt.subplots()
 
-    exact = np.exp(x)
+    exact = np.exp(x) / (1.0 - x)
+
     ax.plot(
         x,
         exact,
         color="black",
-        label=r"$e^x$",
+        label=r"$\frac{e^x}{1 - x}$",
     )
 
     exp_approx = np.zeros_like(x)
@@ -147,15 +148,16 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
             term *= x / n
 
         exp_approx += term
+        approximation = exp_approx / (1.0 - x)
 
-    ax.plot(
+        ax.plot(
             x,
-            exp_approx,
+            approximation,
             label=f"n = {n + 1}",
-        )
+    )
 
     ax.set_xlim(-5.0, 5.0)
-    ax.set_title(f"First {n_terms} Terms of the Series Expansion of $e^x$")
+    ax.set_title(f"First {n_terms} Terms of the Series Expansion of $e^x/(1 - x)$")
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.legend()
