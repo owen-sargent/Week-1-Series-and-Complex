@@ -189,7 +189,7 @@ def boas_1_16_1c(overhang_d: float) -> int:
     if overhang_d < 0:
         raise ValueError("overhang_d must be a positive real number or zero.")
     elif overhang_d == 0:
-        return 0
+        return 1
 
     n_books = 0
     total_overhang = 0.0
