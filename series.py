@@ -147,11 +147,10 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
             term *= x / n
 
         exp_approx += term
-        approximation = exp_approx / (1.0 - x)
 
     ax.plot(
             x,
-            approximation,
+            exp_approx,
             color=f"C{n}",
             label=f"n = {n + 1}",
         )
