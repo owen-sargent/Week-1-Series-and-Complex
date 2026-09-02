@@ -25,22 +25,22 @@ def harmonic(n_terms: int) -> float:
     total_sum = 0.0
     n_terms = int(n_terms)
 
-    if not isinstance(n_terms, (int, np.integer)) or n_terms <= 0:
-        raise ValueError("n_terms must be a positive integer.")
+    if not isinstance(n_terms, (int, np.integer)) or n_terms <= 0: # check if n_terms is a positive integer
+        raise ValueError("n_terms must be a positive integer.") # raise an error if n_terms is not a positive integer
 
-    if n_terms < 50:
-        for i in range(1, n_terms + 1):
+    if n_terms < 50: # compute the sum directly for small n_terms
+        for i in range(1, n_terms + 1): # compute the sum of the first n_terms of the harmonic series
             total_sum += 1 / i
         return total_sum
 
-    recipical = 1 / n_terms
+    recipical = 1 / n_terms # makes the computation more efficient for large n_terms
     return (
         log(n_terms)
         + 0.5772156649015329
         + recipical / 2
         - recipical**2 / 12
         + recipical**4 / 120
-    )
+    ) # compute the sum of the first n_terms of the harmonic series using the asymptotic expansion for large n_terms
 
 
 # Boas, 3rd Edition, Equation 1.13.4
@@ -64,10 +64,10 @@ def boas_1_13_4(
         A tuple containing the sum of the series and the number of iterations used.
     """
     total_sum: float = 0.0
-    term: float = x
-    n: int = 1
+    term: float = x # Initialize the first term of the series
+    n: int = 1 # Initialize n to 1 since the first term corresponds to n=1
 
-    while abs(term) > rel_tol and n <= max_iter:
+    while abs(term) > rel_tol and n <= max_iter: # Continue until the term is smaller than the relative tolerance or the maximum number of iterations is reached
         total_sum += term
         n += 1
         term *= -x * (n - 1) / n
@@ -100,13 +100,13 @@ def boas_1_13_22(x: float, rel_tol: float = 1e-8, max_iter: int = 100) -> tuple[
     f_n: float = 1.0
     s_n: float = 1.0
 
-    while abs(term) > rel_tol and n <= max_iter:
-        p_n *= x
-        f_n /= n
-        s_n += f_n
-        term = p_n * s_n
-        total_sum += term
-        n += 1
+    while abs(term) > rel_tol and n <= max_iter: # Loops until the term is smaller than the relative tolerance or the maximum number of iterations is reached
+        p_n *= x # Update p_n to be x^n
+        f_n /= n # Update f_n to be 1/n!
+        s_n += f_n # Update s_n to be the sum of 1/k! for k=0 to n
+        term = p_n * s_n # Compute the current term of the series
+        total_sum += term # Update the total sum of the series
+        n += 1 # Increment n for the next iteration
     return total_sum, n
 
 
@@ -127,11 +127,11 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
             A tuple containing the figure and axes objects for the plot.
     """
 
-    x = np.linspace(-2, 2, 1000)
+    x = np.linspace(-2, 2, 1000) # Create an array of 1000 points between -2 and 2 for plotting the function and its approximations
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots() # Create a new figure and axes for the plot
 
-    exact = np.exp(x) / (1.0 - x)
+    exact = np.exp(x) / (1.0 - x) # Compute the exact values of the function exp(x)/(1 - x) for the array of x values
 
     ax.plot(
         x,
@@ -140,15 +140,15 @@ def boas_1_13_22_plot(n_terms: int, filename: str | None = None) -> tuple[Figure
         label="True Function",
     )
 
-    exp_approx = np.zeros_like(x)
-    term = np.ones_like(x)
+    exp_approx = np.zeros_like(x) # Initialize an array of zeros with the same shape as x to store the approximations of the series expansion
+    term = np.ones_like(x) # Initialize an array of ones with the same shape as x to store the current term of the series expansion
 
-    for n in range(n_terms):
+    for n in range(n_terms): # Loop over the number of terms to compute and plot the series expansion approximations
         if n > 0:
-            term *= x / n
+            term *= x / n # Update the current term of the series expansion to be x^n/n! for the next iteration
 
-        exp_approx += term
-        approximation = exp_approx / (1.0 - x)
+        exp_approx += term # Update the approximation of the series expansion by adding the current term
+        approximation = exp_approx / (1.0 - x) # Compute the approximation of the function exp(x)/(1 - x) using the current series expansion approximation
 
         ax.plot(
             x,
@@ -186,25 +186,25 @@ def boas_1_16_1c(overhang_d: float) -> int:
     int
         Minimum number of books that can be stacked on a table with the given overhang.
     """
-    if overhang_d < 0:
+    if overhang_d < 0: # Check if the overhang distance is negative
         raise ValueError("overhang_d must be a positive real number or zero.")
-    elif overhang_d == 0:
-        return 1
+    elif overhang_d == 0: # Check if the overhang distance is zero
+        return 1 # Return 1 since at least one book is needed to have an overhang of zero
 
-    n_books = 0
-    total_overhang = 0.0
+    n_books = 0 # Initialize the number of books to zero
+    total_overhang = 0.0 # Initialize the total overhang to zero
 
-    if overhang_d < 5:
+    if overhang_d < 5: # Use a simple loop to compute the number of books for small overhang distances
         n_books = 0
         total_overhang = 0.0
 
-        while total_overhang < overhang_d:
+        while total_overhang < overhang_d: # Loop until the total overhang is greater than or equal to the desired overhang distance
             n_books += 1
-            total_overhang += 1 / (2 * n_books)
+            total_overhang += 1 / (2 * n_books) # Update the total overhang by adding the contribution of the next book in the stack
         return n_books + 1
 
     gamma = 0.5772156649015329
-    n_books = np.exp(2 * overhang_d - gamma)
+    n_books = np.exp(2 * overhang_d - gamma) # Estimates the number of books needed for larger overhang distances using the asymptotic expansion.
     # not - 0.5 + (1 / (12 * overhang_d)) - (1 / (288 * overhang_d**3))
     # due to those terms actually being the correction for n_books
 
@@ -236,16 +236,16 @@ def cos_apprx(x: float, rel_tol: float = 1e-8, max_iter: int = 100) -> tuple[flo
 
     x = x % (2 * np.pi)  # Reduces x to the range [0, 2π] from the periodicity of the cosine function
 
-    if x > np.pi:
-        x -= 2 * np.pi  # Reduces x to the range [-π, π] for better convergence of the Taylor series
+    if x > np.pi: # Reduces x to the range [-π, π] for better convergence of the Taylor series
+        x -= 2 * np.pi 
 
-    term: float = 1.0
+    term: float = 1.0 # Initialize the first term of the series (cos(0) = 1)
     total_sum: float = 1.0
-    n: int = 1
+    n: int = 1 # Initialize n to 1 since the first term corresponds to n=0
     iter_count: int = 0
 
-    while abs(term / total_sum) > rel_tol and iter_count < max_iter:
-        term *= -x*x / (2 * n * (2 * n - 1))
+    while abs(term / total_sum) > rel_tol and iter_count < max_iter: #
+        term *= -x*x / (2 * n * (2 * n - 1)) # Update the current term of the series using the recurrence relation for the Taylor series of cos(x)
         total_sum += term
         n += 1
         iter_count += 1
