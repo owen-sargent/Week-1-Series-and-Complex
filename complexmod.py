@@ -25,11 +25,12 @@ def complex_polar(z: complex) -> tuple[float, float]:
         A tuple containing the magnitude (r) and phase (theta) in radians.
     """
     r = abs(z)
-    theta = cm.phase(z) # Compute the phase angle of the complex number z in radians using the cmath.phase function 
+    theta = cm.phase(z)  # Compute the phase angle of the complex number z in radians using the cmath.phase function
     return (r, theta)
 
 
-def nth_root(z: complex, n: int) -> NDArray[np.complex128]: # The type hint NDArray[np.complex128] indicates that the function returns 
+# The type hint NDArray[np.complex128] indicates that the function returns
+def nth_root(z: complex, n: int) -> NDArray[np.complex128]:
     # a NumPy array of complex numbers with 128-bit precision.
     """Find all n-th roots of a complex number.
 
@@ -46,27 +47,29 @@ def nth_root(z: complex, n: int) -> NDArray[np.complex128]: # The type hint NDAr
         An array containing all n-th roots of z.
 
     """
-    r = abs(z) # Compute the magnitude (r) of the complex number z using the abs function, which returns the absolute value of a complex number.
-    theta = np.angle(z) # Compute the angle (in radians) of the complex number z using NumPy's angle function, 
+    # Compute the magnitude (r) of the complex number z using the abs function
+    r = abs(z)
+    theta = np.angle(z)  # Compute the angle (in radians) of the complex number z using NumPy's angle function
     # which returns the phase angle of the complex number in the range [-π, π].
 
-    k = np.arange(n) # Generate an array of integers from 0 to n-1 using NumPy's arange function, 
+    k = np.arange(n)  # Generate an array of integers from 0 to n-1 using NumPy's arange function
     # which creates an array of evenly spaced values within a given range.
+    # Compute the n-th root of the magnitude r using the formula r^(1/n)
+    root = r ** (1/n)
+    root_theta = (theta + 2 * np.pi * k) / n  # Compute the angles of the n-th roots using the formula (theta + 2πk)/n.
+    # Compute the n-th roots of z using the polar form of complex numbers.
+    roots = root * (np.cos(root_theta) + 1j * np.sin(root_theta))
 
-    root = r ** (1/n) # Compute the n-th root of the magnitude r using the formula r^(1/n), which gives the magnitude of each n-th root of z.
-    root_theta = (theta + 2 * np.pi * k) / n # Compute the angles of the n-th roots using the formula (theta + 2πk)/n.
-
-    roots = root * (np.cos(root_theta) + 1j * np.sin(root_theta)) # Compute the n-th roots of z using the polar form of complex numbers.
-
-    if not isinstance(n, int) or n <= 0: # Basic input validation.
+    if not isinstance(n, int) or n <= 0:  # Basic input validation.
         raise ValueError("n must be a positive integer.")
 
     return np.array(roots)
 
 
 # --- Boas --- #
-@u.quantity_input # This decorator from the Astropy library is used to enforce that the input parameters of the function have the correct physical units.
-# It allows for automatic unit conversion and validation, ensuring that the inputs are compatible with the expected units.
+# Used to enforce that the input parameters of the function have the correct physical units.
+@u.quantity_input
+# It allows for automatic unit conversion and validation
 def complex_impedance(R: float, L: float, C: float, W: float) -> complex:
     """Calculate the complex impedance of a series RLC circuit.
 
@@ -86,7 +89,8 @@ def complex_impedance(R: float, L: float, C: float, W: float) -> complex:
     complex
         The complex impedance Z as a complex number.
     """
-    impedance = R + 1j*(W*L-1/(W*C)) # Compute the complex impedance of the RLC circuit. Based on the formula Z = R + j(ωL - 1/(ωC)).
+    # Compute the complex impedance of the RLC circuit. Based on the formula Z = R + j(ωL - 1/(ωC)).
+    impedance = R + 1j*(W*L-1/(W*C))
     return impedance
 
 
@@ -99,8 +103,9 @@ def plot_rlc(
         time: NDArray[np.float64],
         max_current: float,
         filename: str | None = None
-        ) -> tuple[Any, Any]: # The type hint tuple[Any, Any] indicates that the function returns a tuple containing two elements of any type.
-        # In this case, it will return the current and voltage arrays, which are NumPy arrays of floats.
+        ) -> tuple[Any, Any]:
+    # The type hint tuple[Any, Any] indicates that the function returns a tuple containing two elements of any type.
+    # In this case, it will return the current and voltage arrays, which are NumPy arrays of floats.
     """Plot the current and voltage in a series RLC circuit over time.
 
     Parameters
@@ -126,23 +131,23 @@ def plot_rlc(
         A tuple containing the current and voltage arrays.
     """
 
-    impedance = complex_impedance(resistance, inductance, capacitance, omega) # Compute the complex impedance of the RLC circuit
-    # using the complex_impedance function defined earlier.
+    impedance = complex_impedance(resistance, inductance, capacitance, omega)
+    # Using the complex_impedance function defined earlier.
 
-    angle = omega * time 
+    angle = omega * time
 
     if isinstance(angle, Q):
         angle = angle.to(
             u.rad,
-            equivalencies=u.dimensionless_angles(), # This equivalency allows for the conversion of angles to dimensionless quantities because of Numpy.
+            # This equivalency allows for the conversion of angles to dimensionless quantities because of Numpy.
+            equivalencies=u.dimensionless_angles(),
             )
+    # Compute the current in the RLC circuit as a function of time using the formula I(t) = I_max * sin(ωt).
+    current = max_current * np.sin(angle)
+    # Compute the phase angle of the complex impedance using the arctan2 function
+    phase_angle = np.arctan2(impedance.imag, impedance.real)
 
-    current = max_current * np.sin(angle) # Compute the current in the RLC circuit as a function of time using the formula I(t) = I_max * sin(ωt).
-
-    phase_angle = np.arctan2(impedance.imag, impedance.real) # Compute the phase angle of the complex impedance using the arctan2 function,
-    # which returns the angle in radians between the positive x-axis and the point (x, y) in the Cartesian plane.
-
-    max_voltage = max_current * abs(impedance)
+    max_voltage = max_current * abs(impedance)  # Computes the maximum voltage in the RLC circuit using Ohm's law.
     voltage = max_voltage * np.sin(angle + phase_angle)
 
     with quantity_support():
